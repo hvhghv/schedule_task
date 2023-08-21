@@ -1,0 +1,183 @@
+import win.ui;
+import win.util.tray;
+import fsys.dlg;
+import fsys.dlg.dir;
+import web.json;
+/*DSG{{*/
+mainForm = win.form(text="定时执行";right=757;bottom=467)
+mainForm.add(
+button_add={cls="button";text="添加";left=136;top=392;right=200;bottom=424;z=16};
+button_delete={cls="button";text="删除";left=224;top=392;right=288;bottom=424;z=17};
+button_load={cls="button";text="加载";left=312;top=392;right=376;bottom=424;z=18};
+button_path={cls="button";text="选择目录";left=648;top=168;right=712;bottom=192;z=22};
+button_save={cls="button";text="保存";left=400;top=392;right=464;bottom=424;z=19};
+command={cls="richedit";left=136;top=112;right=632;bottom=136;edge=1;multiline=1;z=3};
+edit={cls="edit";text="0";left=328;top=304;right=352;bottom=328;edge=1;z=8};
+edit4={cls="edit";text="0";left=384;top=304;right=408;bottom=328;edge=1;z=10};
+edit7={cls="edit";text="0";left=440;top=304;right=464;bottom=328;edge=1;z=12};
+groupbox={cls="groupbox";text="Groupbox";left=136;top=208;right=712;bottom=280;edge=1;z=4};
+listbox={cls="listbox";left=24;top=32;right=112;bottom=432;edge=1;items={};z=1};
+name={cls="richedit";left=136;top=56;right=304;bottom=80;edge=1;multiline=1;z=15};
+path={cls="richedit";left=136;top=168;right=632;bottom=192;edge=1;multiline=1;z=21};
+radiobutton={cls="radiobutton";text="间隔时间";left=184;top=240;right=304;bottom=256;checked=1;z=6};
+radiobutton1={cls="radiobutton";text="指定时间";left=560;top=240;right=664;bottom=256;z=5};
+radiobutton2={cls="radiobutton";text="开始执行";left=376;top=240;right=480;bottom=256;z=23};
+static={cls="static";text="命令：";left=136;top=88;right=200;bottom=104;notify=1;transparent=1;z=2};
+static2={cls="static";text="指定时间/间隔时间/开始执行：";left=144;top=304;right=328;bottom=328;notify=1;transparent=1;z=7};
+static3={cls="static";text="时";left=360;top=304;right=392;bottom=328;transparent=1;z=9};
+static4={cls="static";text="名字：";left=136;top=32;right=200;bottom=48;notify=1;transparent=1;z=14};
+static5={cls="static";text="分";left=416;top=304;right=448;bottom=328;transparent=1;z=11};
+static6={cls="static";text="工作路径：";left=136;top=144;right=360;bottom=160;notify=1;transparent=1;z=20};
+static8={cls="static";text="秒";left=472;top=304;right=504;bottom=328;transparent=1;z=13}
+)
+/*}}*/
+
+var table_data = {}
+var delete_check = 0
+mainForm.button_add.oncommand = function(id,event){
+	
+	
+	
+	var name = mainForm.name.text
+	var command = mainForm.command.text
+	var path = mainForm.path.text
+	var check = 0
+	var hour = mainForm.edit.text
+	var min = mainForm.edit4.text
+	var sec = mainForm.edit7.text
+	
+	if(name == ""){
+		return ; 
+	}
+	
+	if(mainForm.radiobutton1.checked){
+		check = 1
+	}
+	
+	if(mainForm.radiobutton2.checked){
+		check = 2
+	}
+	
+	var context = {}
+	context["name"] = name;
+	context["command"] = command
+	context["path"] = path
+	context["check"] = tonumber(check)
+	context["hour"] = tonumber(hour)
+	context["min"] = tonumber(min)
+	context["sec"] = tonumber(sec)
+	
+	
+	table_data[name] = context
+	
+	if(mainForm.listbox.findEx(name) == 0){
+		mainForm.listbox.add(name)
+		mainForm.listbox.selIndex = mainForm.listbox.count
+	}
+	
+	
+	
+}
+
+mainForm.listbox.oncommand = function(id,event){
+	if(event == 0x3){
+		delete_check = 0
+	}
+	
+	if(event == 0x1){
+		
+		delete_check = 1
+		var name = mainForm.listbox.selText
+		
+		mainForm.name.text = name
+		mainForm.command.text = table_data[name]["command"]
+		mainForm.path.text = table_data[name]["path"]
+		
+		if(table_data[name]["check"] == 0){
+			mainForm.radiobutton.checked = true
+			mainForm.radiobutton1.checked = false
+			mainForm.radiobutton2.checked = false
+		}
+		elseif(table_data[name]["check"] == 1){
+			mainForm.radiobutton.checked = false
+			mainForm.radiobutton1.checked = true
+			mainForm.radiobutton2.checked = false
+		}
+		else {
+			mainForm.radiobutton.checked = false
+			mainForm.radiobutton1.checked = false
+			mainForm.radiobutton2.checked = true
+		}
+		
+		
+		mainForm.edit.text = tostring(table_data[name]["hour"])
+		mainForm.edit4.text = tostring(table_data[name]["min"])
+		mainForm.edit7.text = tostring(table_data[name]["sec"])
+	}
+}
+
+mainForm.button_delete.oncommand = function(id,event){
+	
+	if(delete_check){
+		var name = mainForm.name.text
+		var new_table_data = {}
+		for(k,v in table_data){
+			if(k == name){
+				continue
+			}
+			new_table_data[k] = v
+		}
+		table_data = {}
+		table_data = new_table_data
+		
+		mainForm.listbox.delete()
+		mainForm.listbox.selIndex = mainForm.listbox.count
+	}
+
+}
+
+mainForm.button_save.oncommand = function(id,event){
+	var json = web.json.stringify(table_data,true)
+	var path = fsys.dlg.save('json文件(.json)|*.json|',,,mainForm);
+	if(path){
+		string.save(path, json)
+	}
+}
+
+mainForm.button_load.oncommand = function(id,event){
+	
+	table_data = {}
+	delete_check = 0
+	mainForm.listbox.clear()
+	
+	var path = fsys.dlg.open('json文件(.json)|*.json|',,,mainForm);
+	var data
+	
+	
+	if(path){
+		data = string.load(path)
+	}
+	else {
+		return ; 
+	}
+	
+	
+	table_data = web.json.parse(data)
+	
+	for(k,v in table_data){
+		mainForm.listbox.add(k)
+	}
+	
+	mainForm.listbox.selIndex = mainForm.listbox.count
+		
+}
+
+mainForm.button_path.oncommand = function(id,event){
+	var path = fsys.dlg.dir(,mainForm,'请选择目录')
+	if(path){
+		mainForm.path.text = path;
+	}
+}
+
+mainForm.show();
+return win.loopMessage();

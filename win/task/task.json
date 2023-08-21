@@ -1,0 +1,29 @@
+{
+    "test1":{
+        "check":2,
+        "command":"echo \"这是5秒后开始执行\"",
+        "hour":0,
+        "min":0,
+        "name":"test1",
+        "path":"/",
+        "sec":5
+    },
+    "test2":{
+        "check":0,
+        "command":"echo \"这是每隔10秒执行\"",
+        "hour":0,
+        "min":0,
+        "name":"test2",
+        "path":"/",
+        "sec":10
+    },
+    "test3":{
+        "check":1,
+        "command":"echo \"这是在每天13:04:23执行\"",
+        "hour":13,
+        "min":4,
+        "name":"test3",
+        "path":"/",
+        "sec":23
+    }
+}
