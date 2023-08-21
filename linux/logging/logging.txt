@@ -1,19 +1,26 @@
-2023-08-21 12:40:09,900 - 149 - root - INFO - process_callback
+2023-08-21 13:46:23,482 - 44 - root - INFO - process_callback
 test1 这是5秒后开始执行
  
-2023-08-21 12:40:09,901 - 149 - root - INFO - process_callback
+2023-08-21 13:46:23,486 - 44 - root - INFO - process_callback
 test1 End 
-2023-08-21 12:40:14,903 - 149 - root - INFO - start_commend
+2023-08-21 13:46:28,408 - 44 - root - INFO - start_commend
 test2 Start 
-2023-08-21 12:40:14,906 - 149 - root - INFO - process_callback
+2023-08-21 13:46:28,411 - 44 - root - INFO - process_callback
 test2 这是每隔10秒执行
  
-2023-08-21 12:40:14,907 - 149 - root - INFO - process_callback
+2023-08-21 13:46:28,412 - 44 - root - INFO - process_callback
 test2 End 
-2023-08-21 12:40:24,915 - 149 - root - INFO - start_commend
+2023-08-21 13:46:38,421 - 44 - root - INFO - start_commend
 test2 Start 
-2023-08-21 12:40:24,919 - 149 - root - INFO - process_callback
+2023-08-21 13:46:38,424 - 44 - root - INFO - process_callback
 test2 这是每隔10秒执行
  
-2023-08-21 12:40:24,920 - 149 - root - INFO - process_callback
+2023-08-21 13:46:38,424 - 44 - root - INFO - process_callback
+test2 End 
+2023-08-21 13:46:48,433 - 44 - root - INFO - start_commend
+test2 Start 
+2023-08-21 13:46:48,436 - 44 - root - INFO - process_callback
+test2 这是每隔10秒执行
+ 
+2023-08-21 13:46:48,437 - 44 - root - INFO - process_callback
 test2 End 
